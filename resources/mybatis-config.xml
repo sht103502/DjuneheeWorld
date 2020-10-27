@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<settings>
+        <setting name="cacheEnabled" value="false" />
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+	<typeAliases>
+		<typeAlias type="com.icia.DJ.dto.MemberDTO" alias="member"/>
+		<typeAlias type="com.icia.DJ.dto.FaqDTO" alias="faq"/>
+		<typeAlias type="com.icia.DJ.dto.EventDTO" alias="event"/>
+		<typeAlias type="com.icia.DJ.dto.GoodsShopDTO" alias="goodsShop"/>
+		<typeAlias type="com.icia.DJ.dto.BasketDTO" alias="basket"/>
+		<typeAlias type="com.icia.DJ.dto.EntertainmentDTO" alias="entertainment"/>
+		<typeAlias type="com.icia.DJ.dto.AttractionDTO" alias="attraction"/>
+		<typeAlias type="com.icia.DJ.dto.NoticeDTO" alias="notice"/>
+		<typeAlias type="com.icia.DJ.dto.PageDTO" alias="paging"/>
+		<typeAlias type="com.icia.DJ.dto.CommentDTO" alias="comment"/> 
+		<typeAlias type="com.icia.DJ.dto.ReservationDTO" alias="reservation"/>
+		<typeAlias type="com.icia.DJ.dto.ResortRoomDTO" alias="resortRoom"/>
+		
+	</typeAliases>
+</configuration>

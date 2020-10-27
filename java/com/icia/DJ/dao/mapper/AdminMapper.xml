@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Admin">
+ 	<!-- 굿즈샵 페이지(목록 전체) -->
+ 	<select id="goodsShopList" resultType="goodsShop">
+ 		SELECT * FROM D_GOODS
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품목록(판매중) -->
+ 	<select id="onsaleGoodsShopList" resultType="goodsShop">
+ 		SELECT * FROM D_GOODS WHERE GSTOCK != 0
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품목록(품절) -->
+ 	<select id="soldoutGoodsShopList" resultType="goodsShop">
+ 		SELECT * FROM D_GOODS WHERE GSTOCK = 0
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품목록 카운트(전체) -->
+ 	<select id="allGoodsCount" resultType="int">
+ 		SELECT COUNT(*) FROM D_GOODS
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품목록 카운트(판매중) -->
+ 	<select id="onsaleGoodsCount" resultType="int">
+ 		SELECT COUNT(*) FROM D_GOODS WHERE GSTOCK != 0
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품목록 카운트(품절) -->
+ 	<select id="soldoutGoodsCount" resultType="int">
+ 		SELECT COUNT(*) FROM D_GOODS WHERE GSTOCK = 0
+ 	</select>
+ 	
+ 	<!-- 전체 회원 리스트 출력 -->
+ 	<select id="memberList" resultType="member">
+ 		SELECT MID, MPASSWORD, RPAD(SUBSTR(MNAME,1,1), 3, '*') || SUBSTR(MNAME,3) AS MNAME,
+		RPAD(SUBSTR(MPHONE,1,4), 8, '*') || SUBSTR(MPHONE,9) AS MPHONE, MADDRESS, MBIRTH, MEMAIL, MTICKET  
+ 		FROM D_MEMBER
+ 	</select>
+ 	
+ 	<!-- 관리자 회원 관리 페이지에서 특정 회원 검색  -->
+ 	<select id="searchMemberInAdmin" parameterType="String" resultType="member">
+		SELECT MID, MPASSWORD, RPAD(SUBSTR(MNAME,1,1), 3, '*') || SUBSTR(MNAME,3) AS MNAME,
+		RPAD(SUBSTR(MPHONE,1,4), 8, '*') || SUBSTR(MPHONE,9) AS MPHONE, MADDRESS, MBIRTH, MEMAIL, MTICKET FROM D_MEMBER WHERE MID LIKE '%'||#{keyword}||'%' OR MNAME LIKE '%'||#{keyword}||'%'	
+ 	</select>
+ 	
+ 	<!-- 관리자 굿즈샵 상품 관리 페이지에서 특정 상품 검색  -->
+ 	<select id="searchGoodsInAdmin" parameterType="String" resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GCODE LIKE '%'||#{keyword}||'%' OR GNAME LIKE '%'||#{keyword}||'%'	
+ 	</select>
+ 	
+ 	<!-- 굿즈샵 상품 부분삭제 -->
+	<delete id="deleteGoodsByOne" parameterType="string">
+		DELETE FROM D_GOODS WHERE GNAME=#{gname}
+	</delete>
+	
+	<!-- 굿즈샵 상품 등록 -->
+	<insert id="postGoods" parameterType="goodsShop">
+		INSERT INTO D_GOODS
+		VALUES(#{gcode},#{gcategory},#{ginformation},#{gname},#{gprice},#{gstock},#{gfilename1})
+	</insert>
+	
+	<!-- 어트랙션 리스트 -->
+ 	<select id="attractionList" resultType="attraction">
+ 		SELECT * FROM D_ATTRACTION
+ 	</select>
+ 	
+ 	<!-- 어트랙션 등록 -->
+ 	<insert id="attractionAdd" parameterType="attraction">
+ 		INSERT INTO D_ATTRACTION VALUES(#{anum},#{aname},#{ainformation},#{azone},#{aminheight},#{afilename},0)
+ 	</insert>
+ 
+ 	<!-- 어트랙션 삭제 -->
+ 	<delete id="attractionDelete" parameterType="String">
+ 		DELETE FROM D_ATTRACTION WHERE ANUM=#{anum}
+ 	</delete>
+ 	
+ 	<!-- 이벤트 리스트 -->
+ 	<select id="eventList" resultType="event">
+ 		SELECT * FROM D_EVENT
+ 	</select>
+ 	
+ 	<!-- 이벤트 등록 -->
+ 	<insert id="eventAdd" parameterType="event">
+ 		INSERT INTO D_EVENT VALUES(EVNUMBER_SEQ.NEXTVAL,#{evtitle},#{evfilename},#{evbannerfilename})
+ 	</insert>
+ 	
+ 	<!-- 이벤트 삭제 -->
+ 	<delete id="eventDelete" parameterType="int">
+ 		DELETE FROM D_EVENT WHERE EVNUMBER=#{evnumber}
+ 	</delete>
+ 
+ 	<!-- 관리자페이지 회원 삭제 -->
+ 	<delete id="adminDeleteMember" parameterType="String">
+ 		DELETE FROM D_MEMBER WHERE MID=#{mid}
+ 	</delete>
+ 	
+ 	<!-- faq리스트 불러오기 -->
+ 	<select id="faqList" resultType="faq">
+ 		SELECT * FROM D_FAQ
+ 	</select>
+ 
+ 	<!-- faq등록하기 -->
+ 	<insert id="faqWrite" parameterType="faq">
+ 		INSERT INTO D_FAQ VALUES(#{fcategory},D_FAQ_SEQ.NEXTVAL,#{fquestion},#{fanswer})
+ 	</insert>
+ 	
+ 	<!-- faq삭제하기 -->
+ 	<delete id="faqDelete" parameterType="int">
+ 		DELETE FROM D_FAQ WHERE FNUMBER=#{fnumber}
+ 	</delete>
+ 	
+ 	<!-- notice 작성 -->
+	<insert id="noticeWrite" parameterType="notice">
+		INSERT INTO D_NOTICE
+		VALUES(NNUM_SEQ.nextval,#{nwriter},#{npw},#{ntitle},#{ncontents},SYSDATE,0,#{nfilename})
+	</insert>
+ 	
+ </mapper>

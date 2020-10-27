@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="goodsShop">
+
+	<!-- 굿즈샵 카테고리 -->
+	<select id="search1" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GCATEGORY = 'C'
+	</select>
+
+	<select id="search2" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GCATEGORY = 'D'
+	</select>
+
+	<select id="search3" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GCATEGORY = 'S'
+	</select>
+
+	<select id="search4" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS
+	</select>
+
+	<!-- 굿즈 상세보기 -->
+	<select id="goodsView" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GCODE=#{gcode}
+	</select>
+
+	<!-- 장바구니 페이지(목록) -->
+	<select id="putinBasket" parameterType="basket">
+		INSERT INTO D_BASKET VALUES (D_BNUMBER_SEQ.NEXTVAL,#{bid}, #{bcode},
+		#{bquantity})
+	</select>
+
+
+	<!-- 굿즈샵 페이지(목록 전체) -->
+	<select id="goodsShopList" resultType="goodsShop">
+		SELECT * FROM D_GOODS
+	</select>
+
+	<!-- 굿즈샵 상품목록(판매중) -->
+	<select id="onsaleGoodsShopList" resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GSTOCK != 0
+	</select>
+
+	<!-- 굿즈샵 상품목록(품절) -->
+	<select id="soldoutGoodsShopList" resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GSTOCK = 0
+	</select>
+
+	<!-- 굿즈샵 상품목록 카운트(전체) -->
+	<select id="allGoodsCount" resultType="int">
+		SELECT COUNT(*) FROM D_GOODS
+	</select>
+
+	<!-- 굿즈샵 상품목록 카운트(판매중) -->
+	<select id="onsaleGoodsCount" resultType="int">
+		SELECT COUNT(*) FROM D_GOODS WHERE GSTOCK != 0
+	</select>
+
+	<!-- 굿즈샵 상품목록 카운트(품절) -->
+	<select id="soldoutGoodsCount" resultType="int">
+		SELECT COUNT(*) FROM D_GOODS WHERE GSTOCK = 0
+	</select>
+
+	<!-- 굿즈샵 상품 부분삭제 -->
+	<delete id="deleteGoods" parameterType="string">
+		DELETE FROM D_GOODS WHERE GNAME=#{gname}
+	</delete>
+
+	<!-- 굿즈샵 상품 등록 -->
+	<insert id="registerGoods" parameterType="goodsShop">
+		INSERT INTO D_GOODS
+		VALUES(#{gcode},#{gcategory},#{ginformation},#{gname},#{gprice},#{gstock},#{gfilename1})
+	</insert>
+
+	<!-- 장바구니 페이지(목록) -->
+	<select id="basketList" parameterType="String"
+		resultType="basket">
+		SELECT * FROM D_GOODS G, D_BASKET B WHERE B.BCODE=G.GCODE AND
+		B.BID=#{loginID}
+	</select>
+
+	<!-- 장바구니 갯수 -->
+	<select id="basketCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM D_GOODS G,D_BASKET B WHERE B.BCODE=G.GCODE AND
+		B.BID=#{loginID}
+	</select>
+
+	<!-- 장바구니 삭제 -->
+	<delete id="basketDelete" parameterType="int">
+		DELETE FROM EUNJI.D_BASKET WHERE BNUMBER = #{bnumber}
+	</delete>
+
+	<!-- 굿즈 검색 -->
+	<select id="goodsSearch" parameterType="String"
+		resultType="goodsShop">
+		SELECT * FROM D_GOODS WHERE GNAME LIKE
+		'%'||#{goodsName}||'%'
+	</select>
+
+</mapper>

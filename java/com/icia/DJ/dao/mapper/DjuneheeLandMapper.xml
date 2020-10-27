@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+  <mapper namespace="Djuneheeland">
+  
+  <!-- 엔터테이먼트 -->
+  <select id="entertainmentList" resultType="entertainment">
+  	SELECT * FROM EUNJI.D_ENTERTAINERMENT
+  </select>
+  
+  <!-- 엔터테이먼트 타입 -->
+  <select id="entertainmentType1" parameterType="String" resultType="entertainment">
+  	SELECT * FROM EUNJI.D_ENTERTAINERMENT
+  </select>
+  
+   <select id="entertainmentType2" parameterType="String" resultType="entertainment">
+  	SELECT * FROM EUNJI.D_ENTERTAINERMENT WHERE ETYPE = 'P'
+  </select>
+  
+   <select id="entertainmentType3" parameterType="String" resultType="entertainment">
+  	SELECT * FROM EUNJI.D_ENTERTAINERMENT WHERE ETYPE = 'A'
+  </select>
+  
+  <select id="entertainmentType4" parameterType="String" resultType="entertainment">
+  	SELECT * FROM EUNJI.D_ENTERTAINERMENT WHERE ETYPE = 'S'
+  </select>
+  
+     <!-- 어트랙션 목록 -->
+ 	<select id="attractionList" resultType="attraction">
+ 		SELECT * FROM D_ATTRACTION
+ 	</select>
+ 
+ 	<!-- 어트랙션 키에따른 목록 -->
+ 	<select id="attractionSearchHT" parameterType="int" resultType="attraction">
+ 		SELECT * FROM D_ATTRACTION WHERE #{aheight}<![CDATA[>=]]>AMINHEIGHT
+ 	</select>
+ 	
+ 	<!-- 어트랙션 검색 -->
+ 	<select id="searchAttraction" parameterType="String" resultType="attraction">
+ 		SELECT * FROM D_ATTRACTION WHERE aname LIKE '%'||#{attractionName}||'%'
+ 	</select>
+ 	
+ 	
+ 	<!-- 랜드 티켓업데이트 -->
+ 	<update id="ticketUpdate" parameterType="hashMap">
+ 		UPDATE D_MEMBER SET MDATE =#{today}, MTICKET = #{name7} WHERE MID = #{loginId}
+ 	</update>
+ 	<!-- top3 어트랙션 -->
+
+	<select id="top3Attraction" resultType="attraction">
+		SELECT * FROM ATTRACTIONLIST WHERE RN BETWEEN 1 AND 3
+	</select>
+	
+	<!-- 어트랙션 좋아요 숫자 1씩 증가 -->
+	<update id="upAlike" parameterType="String">
+		UPDATE D_ATTRACTION SET ALIKE=ALIKE+1 WHERE ANAME=#{aname}
+	</update>
+  
+  </mapper>

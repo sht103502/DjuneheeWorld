@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+ <mapper namespace="DjuneheeResort">
+ 
+   <!-- 어트랙션 목록 -->
+ 	<select id="roomView" parameterType="String" resultType="resortRoom">
+ 		SELECT * FROM D_ROOM WHERE RNUMBER = #{rnum}
+ 	</select>
+    <!-- 리조트 랜덤 추출 -->
+   <select id="roomRandom" resultType="resortRoom">
+		<![CDATA[SELECT * FROM(SELECT * FROM D_ROOM  ORDER BY DBMS_RANDOM.VALUE) WHERE ROWNUM<=3]]>
+   </select>
+ 
+  </mapper>
