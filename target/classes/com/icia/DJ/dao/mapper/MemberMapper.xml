@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+
+	<!-- 회원가입 memberJoin -->
+	<insert id="memberJoin" parameterType="member">
+		INSERT INTO D_MEMBER
+		VALUES(#{mid},#{mpassword},#{mname},#{mphone},#{maddress}||' '||#{maddress1}, #{mbirth},#{memail},#{mdate, jdbcType=DATE}, #{mticket, jdbcType=NVARCHAR})
+	</insert>
+
+	<!-- 아이디중복확인-->
+	<select id="idOverlap" parameterType="String" resultType="String">
+		SELECT MID FROM D_MEMBER WHERE MID=#{mid}
+	</select>
+	
+	<!-- 회원로그인 -->
+ 	<select id="memberLogin" parameterType="member" resultType ="String">
+ 		SELECT MID FROM D_MEMBER WHERE MID=#{mid} AND MPASSWORD=#{mpassword}
+ 	</select>
+
+	<!-- 아이디 찾기 -->
+ 	<select id="memberFindId" parameterType="member" resultType ="String">
+ 		SELECT MID FROM D_MEMBER WHERE MPHONE=#{mphone} AND MNAME=#{mname}
+ 	</select>
+ 	
+	<!-- 비번 찾기 -->
+ 	<select id="memberFindPw" parameterType="member" resultType ="member">
+ 		SELECT * FROM D_MEMBER WHERE MPHONE=#{mphone} AND MID=#{mid}
+ 	</select>
+ 	
+ 	<!-- 회원 상세페이지(마이페이지)-->
+ 	<select id="memberView" parameterType="String" resultType ="member">
+ 		SELECT * FROM D_MEMBER WHERE MID=#{mid}
+ 	</select>
+
+	<!-- 회원 탈퇴 -->
+	<delete id="memberOut" parameterType="String">
+		DELETE FROM D_MEMBER WHERE MID=#{mid}
+	</delete>
+	
+	<!-- 회원 수정 -->
+	<update id="memberProcess" parameterType="member">
+		UPDATE D_MEMBER SET MPASSWORD=#{mpassword},MNAME=#{mname},MPHONE=#{mphone},MADDRESS=#{maddress}||' '||#{maddress1},MEMAIL=#{memail} WHERE MID=#{mid}
+	</update>
+
+	<!-- 로그인시 아이디 비교 -->
+	<select id="submitLogin" parameterType="map" resultType="String">
+		SELECT MID FROM D_MEMBER WHERE MID=#{mid} AND MPASSWORD=${mpassword}
+	</select>
+
+
+
+
+
+
+
+
+</mapper>
+ 

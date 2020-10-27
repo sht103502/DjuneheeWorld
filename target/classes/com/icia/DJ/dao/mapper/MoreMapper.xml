@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="Board">
+ 
+ 	<!-- faq리스트 불러오기 -->
+ 	<select id="faqList" resultType="faq">
+ 		SELECT * FROM D_FAQ
+ 	</select>
+ 
+ 	<!-- faq등록하기 -->
+ 	<insert id="faqWrite" parameterType="faq">
+ 		INSERT INTO D_FAQ VALUES(#{fcategory},D_FAQ_SEQ.NEXTVAL,#{fquestion},#{fanswer})
+ 	</insert>
+ 	
+ 	<!-- faq삭제하기 -->
+ 	<delete id="faqDelete" parameterType="int">
+ 		DELETE FROM D_FAQ WHERE FNUMBER=#{fnumber}
+ 	</delete>
+	
+	<!-- 수정 할 faq 불러오기 -->
+	<select id="faqModify" parameterType="int" resultType="faq">
+ 		SELECT * FROM D_FAQ WHERE FNUMBER=#{fnumber}
+ 	</select>
+
+	<!-- faq수정하기 -->
+	<update id="faqProcess" parameterType="faq">
+		UPDATE D_FAQ SET FCATEGORY=#{fcategory},FQUESTION=#{fquestion},FANSWER=#{fanswer} 
+ 		WHERE FNUMBER=#{fnumber}
+	</update>
+	
+	<!-- 이벤트 리스트 불러오기 -->
+	<select id="eventList" resultType="event">
+		SELECT * FROM D_EVENT
+	</select>
+	
+	<!-- 이벤트 상세 페이지로 이동 (2020/10/15) -->
+	<select id="eventView" parameterType="int" resultType="event">
+		SELECT * FROM D_EVENT WHERE EVNUMBER=#{evnumber}
+	</select>
+
+	<!-- 이벤트 등록하기 -->
+	<insert id="eventsWrite" parameterType="event">
+		INSERT INTO D_EVENT
+		VALUES(EVNUMBER_SEQ.NEXTVAL,#{evtitle},#{evfilename}, #{evbannerfilename})
+	</insert>
+
+	<!-- 이벤트 삭제하기 -->
+	<delete id="eventDelete" parameterType="int">
+		DELETE FROM D_EVENT WHERE
+		EVNUMBER=#{evnumber}
+	</delete>
+ 	
+ 	<!-- 게시판 작성 -->
+	<insert id="boardWrite" parameterType="notice">
+		INSERT INTO D_NOTICE
+		VALUES(NNUM_SEQ.nextval,#{nwriter},#{npw},#{ntitle},#{ncontents},SYSDATE,0,#{nfilename})
+	</insert>
+
+	<!-- 게시판목록 -->
+	<select id="boardList" resultType="notice">
+		SELECT * FROM D_NOTICE
+	</select>
+
+	<!-- 게시글 갯수 조회 -->
+	<select id="listCount" resultType="int">
+		SELECT COUNT(*) FROM D_NOTICE
+	</select>
+
+	<!-- 페이징 -->
+	<select id="pagingList" parameterType="paging"
+		resultType="notice">
+		SELECT * FROM NOTICELIST WHERE RN BETWEEN #{startrow} AND #{endrow}
+	</select>
+
+	<!-- 상세보기 -->
+	<select id="boardView" parameterType="int" resultType="notice">
+		SELECT * FROM D_NOTICE WHERE NNUM=#{nnum}
+	</select>
+
+	<!-- 조회수 증가 -->
+	<update id="boardhit" parameterType="int">
+		UPDATE D_NOTICE SET NHIT=NHIT+1 WHERE NNUM=#{nnum}
+	</update>
+
+	<!-- 게시글 삭제 -->
+	<delete id="boardDelete" parameterType="int">
+		DELETE FROM D_NOTICE WHERE NNUM=#{nnum}
+	</delete>
+
+	<!-- 게시글 수정 -->
+	<update id="modifyProcess" parameterType="notice">
+		UPDATE D_NOTICE SET
+		NWRITER=#{nwriter},NPW=#{npw},NTITLE=#{ntitle},NCONTENTS=#{ncontents},NFILENAME=#{nfilename}
+		WHERE NNUM=#{nnum}
+	</update>
+
+	<!-- 게시판 검색 (작성자) -->
+	<select id="search1" parameterType="String" resultType="notice">
+		SELECT * FROM NOTICELIST WHERE NWRITER LIKE '%'||#{keyword}||'%'
+	</select>
+
+	<!-- 게시판 검색 (제목) -->
+	<select id="search2" parameterType="String" resultType="notice">
+		SELECT * FROM NOTICELIST WHERE NTITLE LIKE '%'||#{keyword}||'%'
+	</select>
+
+	<!-- 게시판 검색 3 -->
+	<select id="search" resultType="notice">
+		<choose>
+			<when test="type=='NWRITER'">
+				SELECT * FROM NOTICELIST WHERE NWRITER LIKE '%'||#{keyword}||'%'
+			</when>
+
+			<when test="type=='NTITLE'">
+				SELECT * FROM NOTICELIST WHERE NTITLE LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</select>
+ 	
+ 	
+ 	
+</mapper>
